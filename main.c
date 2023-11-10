@@ -1,32 +1,14 @@
 #include "shell.h"
 
 /**
- * main - reads commands from standard input and executes them
+ * main - calls the shell function
  *
- * Return: 0 on success, or EXIT_FAILURE on failure
+ * Return: 0 on success
  */
 
 int main(void)
 {
-	char *command = NULL;
-	size_t bufsize = 0;
-
-	while (1)
-	{
-		prompt(); /* Display prompt */
-
-		if (getline(&command, &bufsize, stdin) == -1)
-		{
-			/* Handle error */
-			free(command);
-			exit(EXIT_FAILURE);
-		}
-
-		execute_command(command); /* Execute the entered command */
-
-		free(command);
-		command = NULL;
-	}
-
+	start_shell(); /* Call the simple shell function */
+	start_shell_with_args(); /* Call the shell with command line arguments */
 	return (0);
 }

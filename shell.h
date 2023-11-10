@@ -9,6 +9,10 @@
 #include <sys/wait.h>
 
 #define MAX_BUFFER 1024
+#define MAX_ARGS 64
+#define MAX_ARG_LENGTH 1024
+
+int start_shell_with_args(void);
 
 int start_shell(void);
 
