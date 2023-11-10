@@ -11,10 +11,13 @@
 #define MAX_BUFFER 1024
 #define MAX_ARGS 64
 #define MAX_ARG_LENGTH 1024
+#define MAX_PATH_LENGTH 1024
 
 void read_command(char input[], int size);
 
 void tokenize_args(char *args[], char input[], int max_args);
+
+int start_shell_path(void);
 
 int start_shell_with_args(void);
 

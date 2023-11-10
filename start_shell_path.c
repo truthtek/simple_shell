@@ -44,13 +44,14 @@ int start_shell_path(void)
 	char *args[MAX_ARGS];
 	int status;
 	char *full_path;
+	pid_t pid;
 
 	while (1)
 	{
 		read_command(input, MAX_ARG_LENGTH);
 		tokenize_args(args, input, MAX_ARGS);
 
-		pid_t pid = fork();
+		pid = fork();
 
 		if (pid == -1)
 		{
