@@ -51,6 +51,9 @@ int start_shell_path(void)
 		read_command(input, MAX_ARG_LENGTH);
 		tokenize_args(args, input, MAX_ARGS);
 
+		if (handle_builtin(args))
+			break;
+
 		pid = fork();
 
 		if (pid == -1)
@@ -61,12 +64,19 @@ int start_shell_path(void)
 		else if (pid == 0)
 		{
 			full_path = search_path(args[0]);
-			if (full_path != NULL && execv(full_path, args) == -1)
+			if (full_path != NULL)
 			{
-				perror("Error");
-				exit(EXIT_FAILURE);
+				if (strcmp(args[0], "exit") == 0)
+				{
+					exit_builtin();
+				}
+				else if (execv(full_path, args) == -1)
+				{
+					perror("Error");
+					exit(EXIT_FAILURE);
+				}
 			}
-			else if (full_path == NULL)
+			else
 			{
 				fprintf(stderr, "%s: command not found\n", args[0]);
 				exit(EXIT_FAILURE);
