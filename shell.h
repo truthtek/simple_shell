@@ -12,10 +12,10 @@
 #define MAX_ARGS 64
 #define MAX_ARG_LENGTH 1024
 #define MAX_PATH_LENGTH 1024
+#define BUFFER_SIZE 1024
 
 void exit_builtin(void);
 
-int env_builtin(void);
 int env_builtin(void);
 
 int handle_builtin(char **args);
