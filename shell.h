@@ -34,10 +34,5 @@ void prompt(void);
 
 void execute_command(char *command);
 
-int main(int argc, char *argv[]);
-FILE* open_file(char *filename); 
-char* read_command(FILE *fp);
-int execute_command(char *command);
-void cleanup(FILE *fp, char *buffer
 
 #endif /* SHELL_H */
