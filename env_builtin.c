@@ -15,7 +15,7 @@ int env_builtin(void)
 	while (*env != NULL)
 	{
 		printf("%s\n", *env);
-	       	env++;
+		env++;
 	}
 	return (0);
 }
