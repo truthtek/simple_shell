@@ -14,6 +14,8 @@
 #define MAX_PATH_LENGTH 1024
 #define BUFFER_SIZE 1024
 
+extern char **environ;
+
 void exit_builtin(void);
 
 int env_builtin(void);

@@ -1,3 +1,4 @@
+#include  <unistd.h>
 #include "shell.h"
 
 /**
@@ -8,9 +9,9 @@
 
 int env_builtin(void)
 {
-	char **environ;
+	char **env;
 
-	char **env = environ;
+	env = environ;
 
 	while (*env != NULL)
 	{

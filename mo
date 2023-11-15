@@ -6,6 +6,7 @@
  *
  * Return: the full path to the command if found, NULL otherwise
  */
+
 char *search_path(char *command)
 {
 	char *path = getenv("PATH");
@@ -32,53 +33,17 @@ char *search_path(char *command)
 }
 
 /**
- * execute_child_process - Execute the child process
- * @full_path: the full path to the command
- * @args: array of command arguments
+ * start_shell_path - Start shell program with PATH handling
+ *
+ * Return: 0 on success, -1 on failure
  */
-void execute_child_process(char *full_path, char *args[])
-{
-	if (execv(full_path, args) == -1)
-	{
-		perror("Error");
-		exit(EXIT_FAILURE);
-	}
-}
 
-/**
- * handle_command - Handle the execution of a command
- * @args: array of command arguments
- */
-void handle_command(char *args[])
-{
-	char *full_path = search_path(args[0]);
-
-	if (full_path != NULL)
-	{
-		if (strcmp(args[0], "exit") == 0)
-		{
-			exit_builtin();
-		}
-		else
-		{
-			execute_child_process(full_path, args);
-		}
-	}
-	else
-	{
-		fprintf(stderr, "%s: command not found\n", args[0]);
-		exit(EXIT_FAILURE);
-	}
-}
-
-/**
- * start_shell_loop - Main loop for the shell
- */
-void start_shell_loop(void)
+int start_shell_path(void)
 {
 	char input[MAX_ARG_LENGTH];
 	char *args[MAX_ARGS];
 	int status;
+	char *full_path;
 	pid_t pid;
 
 	while (1)
@@ -98,22 +63,30 @@ void start_shell_loop(void)
 		}
 		else if (pid == 0)
 		{
-			handle_command(args);
+			full_path = search_path(args[0]);
+			if (full_path != NULL)
+			{
+				if (strcmp(args[0], "exit") == 0)
+				{
+					exit_builtin();
+				}
+				else if (execv(full_path, args) == -1)
+				{
+					perror("Error");
+					exit(EXIT_FAILURE);
+				}
+			}
+			else
+			{
+				fprintf(stderr, "%s: command not found\n", args[0]);
+				exit(EXIT_FAILURE);
+			}
 		}
 		else
 		{
 			waitpid(pid, &status, 0);
 		}
 	}
-}
 
-/**
- * start_shell_path - Start shell program with PATH handling
- *
- * Return: 0 on success, -1 on failure
- */
-int start_shell_path(void)
-{
-	start_shell_loop();
 	return (0);
 }
