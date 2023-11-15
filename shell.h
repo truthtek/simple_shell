@@ -35,12 +35,4 @@ int start_shell(void);
 void prompt(void);
 
 void execute_command(char *command);
-char* readInput(char* input, int maxInputSize);
-
-int isComment(char* input);
-
-int executeCommand(char* input);
-
-int main();
-
 #endif /* SHELL_H */
