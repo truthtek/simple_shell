@@ -8,7 +8,7 @@
 
 int env_builtin(void)
 {
-	extern char **environ;
+	char **environ;
 
 	char **env = environ;
 
