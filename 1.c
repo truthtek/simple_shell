@@ -1,35 +1,37 @@
 #include "shell.h"
-
-#define MAX_INPUT_LENGTH 100
-
 /**
- * main - Entry point of the shell program
- *
- * Return: Always 0
+ * _get_token - get token of string
+ * @lineptr: comman user
+ * Return: To a pointer
  */
-int main(void)
+
+char **_get_token(char *lineptr)
 {
-char input[MAX_INPUT_LENGTH];
-pid_t pid;
-while (1)
-{
-printf("#cisfun$ ");
-if (fgets(input, sizeof(input), stdin) == NULL)
-break;
-input[strcspn(input, "\n")] = '\0';
-if (strcmp(input, "exit") == 0)
-break;
-pid = fork();
-if (pid == 0)
-{
-execlp(input, input, (char *)NULL);
-printf("%s: command not found\n", input);
-exit(0);
-}
-else
-{
-wait(NULL);
-}
-}
-return (0);
+	char **user_command = NULL;
+	char *token = NULL;
+	size_t i = 0;
+	int size = 0;
+
+	if (lineptr == NULL)
+		return (NULL);
+
+	for (i = 0; lineptr[i]; i++)
+	{
+		if (lineptr[i] == ' ')
+			size++;
+	}
+	if ((size + 1) == _strlen(lineptr))
+		return (NULL);
+	user_command = malloc(sizeof(char *) * (size + 2));
+	if (user_command == NULL)
+		return (NULL);
+
+	token = _strtok(lineptr, " \n\t\r");
+	for (i = 0; token != NULL; i++)
+	{
+		user_command[i] = token;
+		token = _strtok(NULL, " \n\t\r");
+	}
+	user_command[i] = NULL;
+	return (user_command);
 }
