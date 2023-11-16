@@ -8,11 +8,11 @@
 
 void read_command(char input[], int size)
 {
-	printf("#cisfun$ ");
+	write(STDOUT_FILENO, "#cisfun$ ", 9);
 
 	if (fgets(input, size, stdin) == NULL)
 	{
-		printf("\n");
+		write(STDOUT_FILENO, "\n", 1);
 		exit(EXIT_SUCCESS);
 	}
 

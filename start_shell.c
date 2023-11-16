@@ -35,7 +35,7 @@ int start_shell(void)
 			args[0] = buffer;
 			args[1] = NULL;
 
-			if (execvp(buffer, args) == -1)
+			if (execve(buffer, args, NULL) == -1)
 			{
 				dprintf(STDERR_FILENO, "%s: No such file or directory\n", buffer);
 				exit(EXIT_FAILURE);
