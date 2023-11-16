@@ -30,7 +30,12 @@ int start_shell(void)
 		}
 		else if (pid == 0)
 		{
-			if (execlp(buffer, buffer, (char *)NULL) == -1)
+			char *args[2];
+
+			args[0] = buffer;
+			args[1] = (char *)NULL;
+
+			if (execvp(buffer, args) == -1)
 			{
 				fprintf(stderr, "%s: No such file or directory\n", buffer);
 				exit(EXIT_FAILURE);
