@@ -23,7 +23,6 @@ int main(void)
 		if (strcmp(input, "exit") == 0)
 		break; /* Exit the shell */
 	pid_t pid = fork();
-		
 		if (pid == 0)
 		{
 			execlp(input, input, (char *)NULL);
