@@ -38,7 +38,7 @@ char *search_path(char *command)
  */
 void execute_child_process(char *full_path, char *args[])
 {
-	if (execv(full_path, args) == -1)
+	if (execvp(full_path, args) == -1)
 	{
 		perror("Error");
 		exit(EXIT_FAILURE);
@@ -51,7 +51,13 @@ void execute_child_process(char *full_path, char *args[])
  */
 void handle_command(char *args[])
 {
-	char *full_path = search_path(args[0]);
+
+	char *full_path = NULL;
+
+	if (args[0] != NULL)
+	{
+		full_path = search_path(args[0]);
+	}
 
 	if (full_path != NULL)
 	{
@@ -63,10 +69,13 @@ void handle_command(char *args[])
 		{
 			execute_child_process(full_path, args);
 		}
+
+		free(full_path);
 	}
 	else
 	{
-		fprintf(stderr, "%s: command not found\n", args[0]);
+		write(STDERR_FILENO, args[0], strlen(args[0]));
+		write(STDERR_FILENO, ": command not found\n", 20);
 		exit(EXIT_FAILURE);
 	}
 }
