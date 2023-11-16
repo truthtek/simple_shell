@@ -27,9 +27,10 @@ int main(void)
 			break; /* Exit the shell */
 
 		pid_t pid = fork();
+		
 		if (pid == 0)
 		{
-			execlp(input, input, (char*)NULL);
+			execlp(input, input, (char *)NULL);
 			printf("%s: command not found\n", input);
 			exit(0);
 		}
