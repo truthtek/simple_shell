@@ -21,9 +21,8 @@ int main(void)
 		input[strcspn(input, "\n")] = '\0';
 
 		if (strcmp(input, "exit") == 0)
-			break; /* Exit the shell */
-
-		pid_t pid = fork();
+		break; /* Exit the shell */
+	pid_t pid = fork();
 		
 		if (pid == 0)
 		{
