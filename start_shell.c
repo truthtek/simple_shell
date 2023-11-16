@@ -14,10 +14,10 @@ int start_shell(void)
 
 	while (1)
 	{
-		printf("#cisfun$ "); /* Display prompt */
+		write(STDOUT_FILENO, "#cisfun$ ", 9); /* Display prompt */
 		if (fgets(buffer, MAX_BUFFER, stdin) == NULL)
 		{
-			printf("\n");
+			write(STDOUT_FILENO, "\n", 1);
 			break; /* Handle EOF (Ctrl+D) */
 		}
 		buffer[strcspn(buffer, "\n")] = '\0'; /* Remove the newline character */
@@ -33,11 +33,11 @@ int start_shell(void)
 			char *args[2];
 
 			args[0] = buffer;
-			args[1] = (char *)NULL;
+			args[1] = NULL;
 
 			if (execvp(buffer, args) == -1)
 			{
-				fprintf(stderr, "%s: No such file or directory\n", buffer);
+				dprintf(STDERR_FILENO, "%s: No such file or directory\n", buffer);
 				exit(EXIT_FAILURE);
 			}
 		}
