@@ -9,8 +9,8 @@
 int start_shell(void)
 {
 	char buffer[MAX_BUFFER];
-	int status;
 	pid_t pid;
+	int status;
 
 	while (1)
 	{
@@ -20,7 +20,7 @@ int start_shell(void)
 			printf("\n");
 			break; /* Handle EOF (Ctrl+D) */
 		}
-		buffer[strcspn(buffer, "\n")] = 0; /* Remove the newline character */
+		buffer[strcspn(buffer, "\n")] = '\0'; /* Remove the newline character */
 
 		pid = fork();
 		if (pid == -1)
