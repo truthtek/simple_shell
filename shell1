@@ -22,11 +22,7 @@ int env_builtin(void);
 
 int handle_builtin(char **args);
 
-void print_prompt(void);
-
-/*void read_command(char input[], int size);*/
-int read_command(char *buffer, size_t max_size);
-/*void read_command(char *buffer, size_t max_size);*/
+void read_command(char input[], int size);
 
 void tokenize_args(char *args[], char input[], int max_args);
 
@@ -38,14 +34,9 @@ int start_shell(void);
 
 void prompt(void);
 
-<<<<<<< HEAD
-/*void execute_command(char *command);*/
-int execute_command(char *buffer);
-=======
 void execute_command(char *command);
 
 
 
->>>>>>> 35650716f9547992f7c9944f92657197581b608e
 
 #endif /* SHELL_H */
