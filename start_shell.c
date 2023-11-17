@@ -9,42 +9,16 @@
 int start_shell(void)
 {
 	char buffer[MAX_BUFFER];
-	pid_t pid;
-	int status;
 
 	while (1)
 	{
-		write(STDOUT_FILENO, "#cisfun$ ", 9); /* Display prompt */
-		if (fgets(buffer, MAX_BUFFER, stdin) == NULL)
-		{
-			write(STDOUT_FILENO, "\n", 1);
-			break; /* Handle EOF (Ctrl+D) */
-		}
-		buffer[strcspn(buffer, "\n")] = '\0'; /* Remove the newline character */
+		print_prompt();
 
-		pid = fork();
-		if (pid == -1)
-		{
-			perror("fork");
-			exit(EXIT_FAILURE);
-		}
-		else if (pid == 0)
-		{
-			char *args[2];
+		if (!read_command(buffer, MAX_BUFFER))
+			break;
 
-			args[0] = buffer;
-			args[1] = NULL;
-
-			if (execve(buffer, args, NULL) == -1)
-			{
-				dprintf(STDERR_FILENO, "%s: No such file or directory\n", buffer);
-				exit(EXIT_FAILURE);
-			}
-		}
-		else
-		{
-			waitpid(pid, &status, 0); /* Wait for the child process to complete */
-		}
+		if (buffer[0] != '\0')
+			execute_command(buffer);
 	}
 
 	return (0);

@@ -1,0 +1,88 @@
+#include "shell.h"
+
+/**
+ * print_prompt - prints the shell prompt
+ */
+void print_prompt(void)
+{
+	write(STDOUT_FILENO, "#cisfun$ ", 9);
+}
+
+/**
+ * read_command - reads a command from standard input
+ * @buffer: the buffer to store the command
+ * @max_size: the maximum size of the buffer
+ *
+ * Return: 1 if successful, 0 on EOF
+ */
+int read_command(char *buffer, size_t max_size)
+{
+	if (getline(&buffer, &max_size, stdin) == EOF)
+	{
+		write(STDOUT_FILENO, "\n", 1);
+		return (0); /* Handle EOF (Ctrl+D) */
+	}
+	buffer[strcspn(buffer, "\n")] = '\0'; /* Remove the newline character */
+	return (1);
+}
+
+/**
+ * execute_command - executes a command
+ * @buffer: the command to execute
+ *
+ * Return: 0 on success, or EXIT_FAILURE on failure
+ */
+int execute_command(char *buffer)
+{
+	pid_t pid;
+	int status;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	else if (pid == 0)
+	{
+		char *args[2];
+
+		args[0] = buffer;
+		args[1] = NULL;
+
+		if (execve(buffer, args, NULL) == -1)
+		{
+			perror(buffer);
+			_exit(EXIT_FAILURE);
+		}
+	}
+	else
+	{
+		waitpid(pid, &status, 0); /* Wait for the child process to complete */
+	}
+
+	return (status);
+}
+
+/**
+ * start_shell - reads commands from standard input and executes them
+ *
+ * Return: 0 on success, or EXIT_FAILURE on failure
+ */
+int start_shell(void)
+{
+	char buffer[MAX_BUFFER];
+
+	while (1)
+	{
+		print_prompt();
+
+		if (!read_command(buffer, MAX_BUFFER))
+			break;
+
+		if (buffer[0] != '\0')
+			execute_command(buffer);
+	}
+
+	return (0);
+}

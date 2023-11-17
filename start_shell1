@@ -1,0 +1,72 @@
+#include "shell.h"
+
+/**
+ * start_shell - reads commands from standard input and executes them
+ *
+ * Return: 0 on success, or EXIT_FAILURE on failure
+ */
+
+int start_shell(void)
+{
+	char buffer[MAX_BUFFER];
+	pid_t pid;
+	int status;
+
+	while (1)
+	{
+		write(STDOUT_FILENO, "#cisfun$ ", 9);/* Display prompt */
+		if (getline(&buffer, &MAX_BUFFER, stdin) == EOF)
+		{
+			write(STDOUT_FILENO, "\n", 1);
+			break;/* Handle EOF (Ctrl+D) */
+		}
+
+		/* Remove the newline character */
+		buffer[strcspn(buffer, "\n")] = '\0';
+
+		/* Check for empty input */
+		if (buffer[0] == '\0')
+			continue;
+
+		pid = fork();
+		if (pid == -1)
+		{
+			perror("fork");
+			exit(EXIT_FAILURE);
+		}
+		else if (pid == 0)
+		{
+			char *args[2];
+
+			args[0] = buffer;
+			args[1] = NULL;
+
+			/* Try to execute the command with the full path */
+			if (execve(buffer, args, NULL) == -1)
+			{
+				/* If not found, check directories in PATH */
+				char *path = getenv("PATH");
+				char *token = strtok(path, ":");
+				while (token != NULL)
+				{
+					char full_path[MAX_BUFFER];
+					snprintf(full_path, sizeof(full_path), "%s/%s", token, buffer);
+
+					if (execve(full_path, args, NULL) != -1)
+						break;/* Successfully executed */
+					token = strtok(NULL, ":");
+				}
+
+				/* If still not found, print an error */
+				perror(buffer);
+				_exit(EXIT_FAILURE);
+			}
+		}
+		else
+		{
+			waitpid(pid, &status, 0);/* Wait for the child process to complete */
+		}
+	}
+
+	return (0);
+}
