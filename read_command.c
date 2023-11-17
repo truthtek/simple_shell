@@ -6,8 +6,7 @@
  * @size: size of the buffer
  */
 
-/*void read_command(char input[], int size)*/
-void read_command(char *buffer, size_t max_size)
+void read_command(char input[], int size)
 {
 	write(STDOUT_FILENO, "#cisfun$ ", 9);
 
